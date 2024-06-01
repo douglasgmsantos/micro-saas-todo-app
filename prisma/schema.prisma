@@ -24,8 +24,14 @@ model User {
   // Optional for WebAuthn support
   Authenticator Authenticator[]
 
+  stripeCustomerId         String?
+  stripeSubscriptionId     String?
+  stripeSubscriptionStatus String?
+  stripePriceId            String?
+
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+  Todo      Todo[]
 }
 
 model Account {
@@ -83,4 +89,16 @@ model Authenticator {
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@id([userId, credentialID])
+}
+
+model Todo {
+  id    String @id @default(cuid())
+  title String
+
+  user   User   @relation(fields: [userId], references: [id])
+  userId String
+
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  doneAt    DateTime?
 }
